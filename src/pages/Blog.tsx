@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
 interface BlogProps {}
-interface BlogState {}
 
-export default class Blog extends Component<BlogProps, BlogState> {
+class Blog extends React.Component<BlogProps> {
   render() {
     return (
       <div>
@@ -14,3 +13,5 @@ export default class Blog extends Component<BlogProps, BlogState> {
     );
   }
 }
+
+export default Blog;

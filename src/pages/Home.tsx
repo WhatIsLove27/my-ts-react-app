@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import Button from "../components/Button";
 import Input from "../components/Input";
 import Text from "../components/Text";
@@ -16,7 +16,7 @@ interface HomeState {
   newProduct: Omit<Product, 'id'>;
 }
 
-export default class Home extends Component<{}, HomeState> {
+class Home extends React.Component<{}, HomeState> {
   state: HomeState = {
     products: [],
     isModalOpen: false,
@@ -27,10 +27,22 @@ export default class Home extends Component<{}, HomeState> {
     }
   };
 
+  componentDidMount() {
+    this.fetchProducts();
+  }
+
+  fetchProducts = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/products');
+      const data = await response.json();
+      this.setState({ products: data });
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
   toggleModal = () => {
-    this.setState(prevState => ({ 
-      isModalOpen: !prevState.isModalOpen 
-    }));
+    this.setState({ isModalOpen: !this.state.isModalOpen });
   };
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -43,24 +55,32 @@ export default class Home extends Component<{}, HomeState> {
     });
   };
 
-  addProduct = () => {
+  addProduct = async () => {
     const { title, price } = this.state.newProduct;
     if (title && price) {
-      this.setState(prevState => ({
-        products: [
-          ...prevState.products,
-          {
-            ...prevState.newProduct,
-            id: Date.now()
-          }
-        ],
-        newProduct: {
-          title: "",
-          description: "",
-          price: ""
-        },
-        isModalOpen: false
-      }));
+      try {
+        const response = await fetch('http://localhost:3001/api/products', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(this.state.newProduct),
+        });
+        
+        if (response.ok) {
+          this.setState({
+            newProduct: {
+              title: "",
+              description: "",
+              price: ""
+            },
+            isModalOpen: false
+          });
+          this.fetchProducts(); // Обновляем список после добавления
+        }
+      } catch (error) {
+        console.error('Error adding product:', error);
+      }
     }
   };
 
@@ -140,3 +160,5 @@ export default class Home extends Component<{}, HomeState> {
     );
   }
 }
+
+export default Home;

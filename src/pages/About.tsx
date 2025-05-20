@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
 interface AboutProps {}
-interface AboutState {}
 
-export default class About extends Component<AboutProps, AboutState> {
+class About extends React.Component<AboutProps> {
   render() {
     return (
       <div>
@@ -14,3 +13,5 @@ export default class About extends Component<AboutProps, AboutState> {
     );
   }
 }
+
+export default About;
