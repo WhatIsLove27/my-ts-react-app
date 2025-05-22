@@ -1,0 +1,13 @@
+.tea__card_list {
+    display: grid;
+    grid-template-columns: minmax(200px,405px) minmax(200px,505px) minmax(200px,295px);
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+    justify-content: center;
+    gap: 15px;
+}
+
+.tea__card_list_item {
+    min-height: 233px;
+    border-radius: 10px;
+}
